@@ -101,6 +101,59 @@ SELECT DISTINCT CITY
 FROM STATION
 WHERE CITY NOT REGEXP '[aeiou]$'
 
+QUE18) Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.
+SELECT DISTINCT city FROM station 
+WHERE city RLIKE '^[^aeiouAEIOU].*|.*[^AEIOUaeiou]$';
+
+QUE19) Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY NOT REGEXP '^[aeiou]'
+AND CITY NOT REGEXP '[aeiou]$'
+
+QUE20) Query the Name of any student in STUDENTS who scored higher than 75 Marks. Order your output by the last three characters of each name. 
+If two or more students both have names ending in the same last three characters (i.e.: Bobby, Robby, etc.), secondary sort them by ascending ID.
+
+SELECT Name
+FROM STUDENTS
+WHERE Marks > 75
+ORDER BY SUBSTRING(Name, LENGTH(Name)-2, 3), ID;
+
+QUE21) Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than 2000 per month 
+who have been employees for less than 10 months.Sort your result by ascending employee_id.
+
+SELECT name FROM Employee 
+WHERE salary > 2000 AND months < 10 
+ORDER BY employee_id;
+
+QUE22) A median is defined as a number separating the higher half of a data set from the lower half. 
+Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  4 decimal places.
+
+SELECT ROUND(S1.LAT_N, 4) 
+FROM STATION AS S1 
+WHERE (SELECT ROUND(COUNT(S1.ID)/2) - 1 
+       FROM STATION) = 
+      (SELECT COUNT(S2.ID) 
+       FROM STATION AS S2 
+       WHERE S2.LAT_N > S1.LAT_N);
+
+QUE23) The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, name, 
+and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, 
+then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
+
+select m.hacker_id, h.name, sum(score) as total_score from
+(select hacker_id, challenge_id, max(score) as score
+from Submissions group by hacker_id, challenge_id) as m
+join Hackers as h
+on m.hacker_id = h.hacker_id
+group by m.hacker_id, h.name
+having total_score > 0
+order by total_score desc, m.hacker_id;
+
+
+
+
+
 
 
 
