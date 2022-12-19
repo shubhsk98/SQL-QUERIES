@@ -151,11 +151,25 @@ having total_score > 0
 order by total_score desc, m.hacker_id;
 
 
+QUE24) Top 10 salesperson Easy
+A salesperson is a person whose job is to sell products or services. From the following dataframe, write a SQL query to find the top 10 salesperson that have made highest sale. Return their names and total sale amount.
+Table-I: sale,  Table-II: salesman
+ANS = 
+SELECT salesman_name, SUM(sale_amount) as total_sale
+FROM salesman  a JOIN sales b ON a.salesman_id = b.salesman_id
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10;
 
+QUE25) Information of SalespersonEasy
+From the following dataframes, write a SQL query to find the information on each salesperson of ABC Company. Return name, city, country and state of each salesperson.
+Table-I: salespersons, Table-II: address
 
+select  first_name,last_name, city, state
+from salespersons a  left join address b
+on a.salesperson_id = b.salesperson_id
 
-
-
+QUE26) 
 
 
 
