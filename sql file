@@ -196,14 +196,39 @@ FROM employees p1,
 WHERE
     p1.email_id = p2.email_id AND p1.employee_id > p2.employee_id
 
+QUE29) Find even or odd values : Easy
+From the following dataframe, write a SQL query to find the even or odd values. Return "Even" for even number and "Odd" for odd number.
 
+ANS = SELECT srno, col_val,
+       CASE col_val 
+           WHEN  col_val % 2 = 0
+               THEN 'Even' 
+           else  'Odd'
+       END as 'even_odd'
+FROM 
+    tablefortest
+    
+QUE 30) Overall rate Easy
+From the following dataframe, write a SQL query to find the overall rate of execution of orders, 
+which is the number of orders execution divided by the number of orders quote. Return rate_of_execution rounded to 2 decimals places.
 
+ANS = SELECT
+ROUND(
+    IFNULL(
+    (SELECT COUNT(*) FROM (SELECT DISTINCT orders_from, executed_from FROM orders_executed) AS A)
+    /
+    (SELECT COUNT(*) FROM (SELECT DISTINCT distributor_id, company_id FROM orders_issued) AS B),
+    0)
+, 2) AS rate_of_execution;
 
+QUE 31) No order : Easy
+From the following dataframes find those customers who did not make any order to the supplier 'DCX LTD'.
+ANS = SELECT C.customer_name
+FROM orders A , supplier B ,customers C
+WHERE B.supplier_id != A.supplier_id
+limit 3
 
-
-
-
-
+QUE 32)From the following dataframes, write an SQL query to find the best seller by total sales price. Return distributor ID , If there is a tie, report them all.
 
 
 
