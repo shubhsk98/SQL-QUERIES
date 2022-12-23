@@ -228,12 +228,71 @@ FROM orders A , supplier B ,customers C
 WHERE B.supplier_id != A.supplier_id
 limit 3
 
-QUE 32)From the following dataframes, write an SQL query to find the best seller by total sales price. Return distributor ID , If there is a tie, report them all.
+QUE 32)From the following dataframes, 
+write an SQL query to find the best seller by total sales price. Return distributor ID , If there is a tie, report them all.
 
+SELECT DISTINCT distributor_id
+FROM sales_info
+GROUP BY distributor_id
+HAVING SUM(total_cost) =
+(
+SELECT SUM(total_cost) AS total_price
+FROM sales_info
+GROUP BY distributor_id
+ORDER BY total_price DESC
+LIMIT 1
+);
 
+QUE33) From the following dataframe, write a SQL query to display those items that were only sold in the 2nd quarter of a year, 
+i.e. April 1st to June end for the year 2020. Return item code and item description.
 
+ans = SELECT item_code, item_desc
+FROM item
+WHERE item_code IN (
+SELECT item_code
+FROM sales_info
+WHERE date_of_sell BETWEEN '2020-04-01' AND '2020-06-30'
+);
 
+QUE 34) From the following table write a SQL query to find the highest purchase with its corresponding item for each customer. 
+In case of a same quantity purchase find the item code which is smallest.
+The output must be sorted by increasing of customer_id. Return customer ID,lowest item code and purchase quantity.
 
+SELECT customer_id, min(item_code) as 'lowest item code', purch_qty
+FROM purchase
+WHERE (customer_id, purch_qty) IN (SELECT customer_id, max(purch_qty) 
+FROM purchase
+GROUP BY customer_id)
+GROUP BY customer_id, purch_qty
+ORDER BY customer_id;
+
+QUE 35) From the following tables write a SQL query to display those managers who have average experience for each scheme.
+
+SELECT s.scheme_code  , 
+ROUND(SUM(m.running_years) * 1.0/NULLIF(COUNT(DISTINCT m.manager_id), 0) ,2) AS 'Average year of experience'
+FROM scheme s JOIN managing_body m 
+ON m.manager_id  = s.scheme_manager_id
+GROUP BY s.scheme_code;
+
+QUE 36) From the above dataframes, write a SQL query to find those schemes which executed by minimum number of employees. Return scheme code.
+SELECT scheme_code
+FROM scheme
+GROUP BY scheme_code
+HAVING COUNT(scheme_code) = 
+(SELECT MIN(No_Of_Emp) FROM (SELECT COUNT(*) AS No_Of_Emp 
+FROM scheme 
+GROUP BY scheme_code)ss1);
+
+QUE 37) From the following dataframes, write a SQL query to find those experienced manager who execute the schemes. Return scheme code and scheme manager ID.
+
+SELECT scheme_code, p.scheme_manager_id
+FROM scheme p JOIN managing_body e
+ON p.scheme_manager_id = e.manager_id
+WHERE (scheme_code, e.running_years) IN
+(SELECT scheme_code, MAX(running_years)
+FROM scheme p JOIN managing_body e
+ON p.scheme_manager_id = e.manager_id
+GROUP BY scheme_code);
 
 
 
