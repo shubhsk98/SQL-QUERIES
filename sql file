@@ -294,6 +294,60 @@ FROM scheme p JOIN managing_body e
 ON p.scheme_manager_id = e.manager_id
 GROUP BY scheme_code);
 
+QUE 38 ) From the tables write a SQL query to find those students appeared exams in various subjects in every year. 
+Return examination ID, subject name, examination year, number of students.
+ANS = 
+select e.exam_id, s.subject_name, e.exam_year, e.no_of_student
+FROM exam_test  e JOIN subject_test s
+ON e.subject_id = s.subject_id
+ORDER BY exam_id,subject_name,exam_year;
+
+QUE39) From the tables write a SQL query to compute total number of students who appeared for the first year of each examination of every subject. 
+Return examination ID, subject name, first year, number of students.
+ANS =
+select s1.exam_id, p.subject_name,s1.exam_year as first_year, s1.no_of_student
+from exam_test s1
+JOIN subject_test p on s1.subject_id = p.subject_id 
+join (select subject_id, min(exam_year) min_yr 
+from exam_test group by subject_id) s2
+on s1.subject_id = s2.subject_id 
+and s1.exam_year = s2.min_yr;
+
+QUE 40) From the tables write a SQL query to find those students who achieved 100 percent marks in every subject for all the year. 
+Return subject ID, subject name, students for all year.
+ANS = 
+SELECT  s.subject_id, p.subject_name, 
+SUM(s.no_of_student) as 'Students for all year'  
+
+FROM exam_test s  JOIN subject_test p 
+ON s.subject_id = p.subject_id
+GROUP BY s.subject_id;
+
+
+QUE 41) What is the total amount each customer spent at the restaurant?
+ANS=
+select s.customer_id, 
+sum(m.price) as total_sales
+from sales s join menu m
+where s.product_id = m.product_id
+group by s.customer_id;
+
+QUE42) What was the first item from the menu purchased by each customer?
+select s.customer_id, m.product_name
+from sales s join menu m using (product_id)
+where s.order_date in (
+select min(order_date) from sales
+group by customer_id
+)
+limit 4
+
+
+
+
+
+
+
+
 
 
 
