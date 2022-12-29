@@ -341,13 +341,36 @@ group by customer_id
 )
 limit 4
 
+que 43) What is the most purchased item on the menu and how many times was it purchased by all customers?
+ans = SELECT COUNT(s.product_id) AS most_purchased, product_name
+FROM  sales AS s JOIN menu AS m
+ON s.product_id = m.product_id
+GROUP BY s.product_id, product_name
+ORDER BY most_purchased DESC;
+
+QUE 44) Which item was the most popular for each customer?
+SELECT s.customer_id, m.product_name, 
+COUNT(m.product_id) AS order_count
+FROM menu AS m JOIN sales AS s
+ON m.product_id = s.product_id
+GROUP BY s.customer_id,m.product_name
+
+que 45 )Join All The Things. Recreate the table with: customer_id, order_date, product_name, price, member (Y/N)
 
 
 
+que 46) If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
+ans = WITH points AS (
+SELECT s.customer_id, s.product_id, m.price,
+CASE WHEN product_id = 1 THEN price * 20
+ELSE price *10 END AS points
+FROM sales s JOIN menu m USING(product_id))
 
+SELECT customer_id, SUM(points) AS total_points
+FROM points GROUP BY customer_id
 
-
-
-
-
-
+que 47) How many days has each customer visited the restaurant?
+ans = SELECT customer_id
+     ,COUNT(DISTINCT order_date) AS visits
+FROM sales
+GROUP BY customer_id;
