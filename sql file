@@ -119,12 +119,49 @@ FROM STUDENTS
 WHERE Marks > 75
 ORDER BY SUBSTRING(Name, LENGTH(Name)-2, 3), ID;
 
+
 QUE21) Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than 2000 per month 
 who have been employees for less than 10 months.Sort your result by ascending employee_id.
 
 SELECT name FROM Employee 
 WHERE salary > 2000 AND months < 10 
 ORDER BY employee_id;
+
+que ) Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+
+Equilateral: It's a triangle with 3 sides of equal length.
+Isosceles: It's a triangle with 2 sides of equal length.
+Scalene: It's a triangle with 3 sides of differing lengths.
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+
+SELECT CASE
+WHEN A + B <= C OR A + C <= B OR B + C <= A THEN 'Not A Triangle'
+WHEN A = B AND B = C THEN 'Equilateral'
+WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+ELSE 'Scalene'
+END
+FROM TRIANGLES;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 QUE22) A median is defined as a number separating the higher half of a data set from the lower half. 
 Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  4 decimal places.
