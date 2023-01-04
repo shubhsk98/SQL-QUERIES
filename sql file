@@ -142,6 +142,130 @@ ELSE 'Scalene'
 END
 FROM TRIANGLES;
 
+que ) Query the following two values from the STATION table:
+
+The sum of all values in LAT_N rounded to a scale of  decimal places.
+The sum of all values in LONG_W rounded to a scale of  decimal places.
+
+SELECT ROUND(SUM(LAT_N), 2), ROUND(SUM(LONG_W), 2)
+FROM STATION;
+
+que )Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.23. Truncate your answer to  decimal places.
+ans == select truncate(sum(lat_n),4) from station where lat_n between 38.7880 and 137.2345;
+
+que )Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2344. Truncate your answer to 4 decimal places.
+ans == select truncate(max(lat_n),4) from station where lat_n< 137.2345;
+
+que ) Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than . Round your answer to  decimal places.
+ans == SELECT ROUND(LONG_W,4)
+FROM STATION
+WHERE LAT_N = (SELECT MAX(LAT_N) FROM STATION WHERE LAT_N < 137.2345);
+
+que )Query the smallest Northern Latitude (LAT_N) from STATION that is greater than . Round your answer to  decimal places.
+
+ans == SELECT ROUND(MIN(LAT_N),4) 
+FROM STATION
+WHERE LAT_N > 38.7780;
+
+que ) Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than 38.7780. Round your answer to 4 decimal places.
+ans == SELECT ROUND(LONG_W,4)
+FROM STATION
+WHERE LAT_N = ( SELECT MIN(LAT_N) FROM STATION WHERE LAT_N > 38.7780);
+
+que )Consider P1(a,b) and P2(c,d) to be two points on a 2D plane.
+a happens to equal the minimum value in Northern Latitude (LAT_N in STATION).
+ b happens to equal the minimum value in Western Longitude (LONG_W in STATION).
+ c happens to equal the maximum value in Northern Latitude (LAT_N in STATION).
+ d happens to equal the maximum value in Western Longitude (LONG_W in STATION).
+Query the Manhattan Distance between points P1 and P2 and round it to a scale of 4 decimal places.
+
+ans  == SELECT ROUND((MAX(LAT_N) - MIN(LAT_N) + MAX(LONG_W) - MIN(LONG_W)), 4) AS D
+FROM STATION
+
+QUE ) Consider P1(a,b) and P2(c,d) to be two points on a 2D plane where (a,b) are the respective minimum and maximum values of Northern Latitude (LAT_N) and
+(c,d) are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION.
+Query the Euclidean Distance between points  and  and format your answer to display  decimal digits.
+ans === SELECT ROUND(SQRT(POW(MAX(LAT_N)-MIN(LAT_N),2) + POW(MAX(LONG_W)-MIN(LONG_W),2)), 4) FROM station;
+
+que ) A median is defined as a number separating the higher half of a data set from the lower half. 
+Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
+
+ans ) == SET @rowIndex := -1;
+SELECT ROUND(AVG(t.LAT_N),4) FROM
+(SELECT @rowIndex:= @rowIndex+1 AS rowIndex, s.LAT_N from STATION AS s ORDER BY s.LAT_N) AS t
+where t.rowIndex in (floor(@rowIndex/2), ceil(@rowIndex/2));
+
+que ) Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+ans == SELECT SUM(City.population)
+FROM Country
+INNER JOIN City
+    ON Country.Code = City.CountryCode
+WHERE Country.Continent='Asia';
+
+que )Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+ans = SELECT City.Name 
+FROM City, Country 
+WHERE City.CountryCode = Country.Code AND Continent = 'Africa' ;
+
+que ) Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and
+their respective average city populations (CITY.Population) rounded down to the nearest integer.
+ans == SELECT Country.Continent, FLOOR(AVG(City.Population))
+FROM Country, City 
+WHERE Country.Code = City.CountryCode 
+GROUP BY Country.Continent ;
+
+que ) You are given two tables: Students and Grades. Students contains three columns ID, Name and Marks.
+ans ==
+SELECT CASE 
+	WHEN Grades.Grade < 8 THEN 'NULL' 
+	ELSE Students.Name 
+	END 
+, Grades.Grade, Students.Marks 
+FROM Students, Grades 
+WHERE Students.Marks >= Grades.Min_mark AND Students.Marks <= Grades.Max_mark 
+ORDER BY Grades.Grade DESC, Students.Name;
+
+que ) Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! 
+Write a query to print the respective hacker_id and name of hackers who achieved full scores for more than one challenge. 
+Order your output in descending order by the total number of challenges in which the hacker earned a full score. 
+If more than one hacker received full scores in same number of challenges, then sort them by ascending hacker_id.
+
+ans==
+SELECT S.hacker_id, name
+FROM SUBMISSIONS AS S
+JOIN HACKERS AS H ON S.hacker_id = H.hacker_id
+JOIN Challenges AS C ON S.challenge_id = C.challenge_id
+JOIN Difficulty AS D ON C.difficulty_level = D.difficulty_level
+WHERE S.score = D.score
+GROUP BY name, S.hacker_id
+HAVING count(S.challenge_id) > 1
+ORDER BY count(S.challenge_id) DESC, S.hacker_id
+
+que ) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
